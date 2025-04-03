@@ -28,6 +28,16 @@ main .left {
   position: relative;
 }
 
+.left .code,
+.code pre,
+.code pre code {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border-radius: 0.7rem;
+  background-color: #0c0c0c;
+}
+
 main .left .review-button {
   position: absolute;
   bottom: 1rem;
