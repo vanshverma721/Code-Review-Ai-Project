@@ -13,6 +13,7 @@ function App() {
 }`)
 
   const [review, setReview] = useState(``)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     prism.highlightAll()
@@ -20,9 +21,16 @@ function App() {
 
   async function reviewCode() {
 
-    const response = await axios.post('http://localhost:3000/ai/get-review', { code })
-
-    setReview(response.data)
+    setLoading(true)
+    try {
+      const response = await axios.post('http://localhost:3000/ai/get-review', { code })
+      setReview(response.data)
+    } catch (error) {
+      console.error("Error fetching review:", error)
+      setReview("An error occurred while fetching the review.")
+    } finally {
+      setLoading(false) // Set loading to false once fetching is done
+    }
   }
 
   return (
@@ -48,17 +56,20 @@ function App() {
             />
           </div>
 
-          <div className="review-button" onClick={reviewCode}>Review</div>
+          <div className="review-button" onClick={reviewCode}>
+            {loading ? "Loading..." : "Review"}
+          </div>
 
         </div>
 
         <div className="right">
-          <Markdown>{review}</Markdown>
+          {loading ? <div className="spinner"></div> : <Markdown>{review}</Markdown>}
         </div>
 
       </main>
     </>
   )
 }
+
 
 export default App
